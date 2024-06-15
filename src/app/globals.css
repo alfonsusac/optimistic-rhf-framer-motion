@@ -31,3 +31,16 @@ body {
     text-wrap: balance;
   }
 }
+
+
+button {
+   @apply p-2 px-4 mt-2 bg-white/20 rounded-md
+}
+
+main > button {
+  @apply m-2
+}
+
+main > div {
+  @apply m-2 p-4 rounded-md shadow-[0_0_1px_-0.1px_#fff] flex flex-col items-start
+}
