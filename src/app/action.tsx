@@ -6,7 +6,7 @@ export async function addMessage(input: {
   content: string;
   optimisticId: string;
 }) {
-  await delay(100);
+  await delay(500);
   revalidatePath("/");
   return {
     id: crypto.randomUUID(),
@@ -16,7 +16,7 @@ export async function addMessage(input: {
 }
 
 export async function deleteMessage(input: { id: string }) {
-  await delay(100);
+  await delay(500);
   revalidatePath("/");
   return true;
 }

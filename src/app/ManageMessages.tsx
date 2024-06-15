@@ -21,7 +21,7 @@ export function ManageMessages() {
   const { fields, append, update, remove } = useFieldArray({
     control: form.control,
     name: "messages",
-    keyName: `rhfId`
+    keyName: `rhfId`,
   });
 
   const addItem = () => {
@@ -39,9 +39,9 @@ export function ManageMessages() {
       .getValues()
       .messages.findIndex(m => m.optimisticId === dataFromServer.optimisticId);
     if (idx === -1) {
-      console.log(``)
-      return
-    };
+      console.log(``);
+      return;
+    }
     update(idx, dataFromServer);
   };
 
@@ -60,9 +60,9 @@ export function ManageMessages() {
     const idx = form.getValues().messages.findIndex(m => m.id === id);
     const msg = form.getValues().messages.find(m => m.id === id);
     if (idx === -1 || !msg) {
-      console.log(`idx or msg not found`, idx, msg, id)
-      return
-    };
+      console.log(`idx or msg not found`, idx, msg, id);
+      return;
+    }
     update(idx, { ...msg, deleting: true });
   };
 
@@ -82,28 +82,37 @@ export function ManageMessages() {
   return (
     <main>
       <AnimatePresence initial={false}>
-        {fields.filter(msg => !msg.deleting).map(msg => {
-          return (
-            <motion.div
-              key={msg.optimisticId ?? msg.id}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 100, height: `auto` }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <div>{msg.content}</div>
-              <small>key: {msg.id ? msg.id : `(${msg.optimisticId})`}</small>
-              <button
-                onClick={async () => {
-                  removeItem(msg.id);
-                  await deleteMessage({ id: msg.id });
-                  updateRemovedItem(msg.id);
+        {fields
+          .filter(msg => !msg.deleting)
+          .map(msg => {
+            return (
+              <motion.div
+                key={msg.optimisticId ?? msg.id}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 100, height: `auto` }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{
+                  duration: 1,
                 }}
               >
-                Delete
-              </button>
-            </motion.div>
-          );
-        })}
+                <div className="p-3 flex flex-col">
+                  <div>{msg.content}</div>
+                  <small>
+                    key: {msg.id ? msg.id : `sending... (${msg.optimisticId})`}
+                  </small>
+                  <button
+                    onClick={async () => {
+                      removeItem(msg.id);
+                      await deleteMessage({ id: msg.id });
+                      updateRemovedItem(msg.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
       </AnimatePresence>
       <button
         onClick={async () => {

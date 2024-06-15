@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ManageMessages } from "./ManageMessages"
 
 export default async function Home() {
